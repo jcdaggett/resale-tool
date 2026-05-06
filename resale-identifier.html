@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resale Identifier</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 24px 16px; }
+  .container { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .sub { font-size: 14px; color: #666; margin-bottom: 24px; }
+  .section-label { font-size: 11px; color: #888; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; }
+  input[type="password"] {
+    flex: 1; padding: 10px 12px;
+    border: 1px solid #ddd; border-radius: 8px;
+    font-size: 14px; font-family: inherit;
+    background: #fff; color: #1a1a1a;
+  }
+  input[type="password"]:focus { outline: none; border-color: #888; }
+  .key-row { display: flex; gap: 8px; align-items: center; }
+  .btn-small { padding: 10px 16px; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; white-space: nowrap; }
+  .btn-small:hover { opacity: 0.82; }
+  .btn-clear { padding: 10px 12px; background: none; color: #888; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+  .btn-clear:hover { background: #f0f0eb; }
+  .key-note { font-size: 12px; color: #888; margin-top: 6px; }
+  .key-saved { font-size: 13px; color: #1a7a4a; margin-top: 6px; display: none; }
+  .drop-zone { border: 1.5px dashed #ccc; border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; background: #fff; transition: background 0.15s, border-color 0.15s; }
+  .drop-zone:hover { background: #fafaf8; border-color: #aaa; }
+  .drop-zone.has-image { padding: 0; border-style: solid; overflow: hidden; }
+  #preview { width: 100%; max-height: 280px; object-fit: contain; display: none; border-radius: 12px; }
+  .drop-icon { font-size: 36px; display: block; margin-bottom: 8px; }
+  .drop-label { font-size: 14px; color: #555; }
+  .drop-sub { font-size: 12px; color: #999; margin-top: 4px; }
+  textarea { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; color: #1a1a1a; background: #fff; resize: vertical; margin-top: 12px; }
+  textarea:focus { outline: none; border-color: #888; }
+  button.primary { width: 100%; margin-top: 14px; padding: 12px; font-size: 15px; font-weight: 500; background: #1a1a1a; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.15s; }
+  button.primary:disabled { opacity: 0.35; cursor: not-allowed; }
+  button.primary:hover:not(:disabled) { opacity: 0.82; }
+  .error { color: #c0392b; font-size: 13px; margin-top: 10px; display: none; }
+  #loading { display: none; text-align: center; padding: 40px 0; }
+  .spinner { width: 30px; height: 30px; border: 2.5px solid #e0e0e0; border-top-color: #555; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #results { display: none; margin-top: 4px; }
+  .result-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .result-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .result-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
+  .result-value { font-size: 15px; color: #1a1a1a; line-height: 1.55; }
+  .price-big { font-size: 24px; font-weight: 600; color: #1a7a4a; }
+  .price-note { font-size: 12px; color: #888; margin-top: 4px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .badge { display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 20px; margin: 3px 4px 3px 0; font-weight: 500; }
+  .badge-fb { background: #e7f0fd; color: #1a56c4; }
+  .badge-eb { background: #fef3e2; color: #a05a00; }
+  .badge-cr { background: #f2f2f2; color: #555; }
+  .copy-btn { font-size: 12px; cursor: pointer; float: right; color: #888; background: none; border: 1px solid #ddd; border-radius: 6px; padding: 2px 8px; }
+  .copy-btn:hover { background: #f5f5f0; }
+  pre.desc { white-space: pre-wrap; font-size: 14px; font-family: inherit; line-height: 1.6; color: #1a1a1a; }
+  button.reset-btn { font-size: 13px; padding: 6px 14px; background: none; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
+  button.reset-btn:hover { background: #f5f5f0; }
+  .platform-tip { font-size: 13px; color: #555; margin-top: 10px; line-height: 1.5; }
+  .divider { border: none; border-top: 1px solid #e8e8e8; margin: 20px 0; }
+  @media (max-width: 420px) { .grid-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Resale Identifier</h1>
+  <p class="sub">Upload a photo — get an ID, price estimate, listing, and where to sell.</p>
+
+  <div id="key-section" style="margin-bottom:20px;">
+    <p class="section-label">Anthropic API key</p>
+    <div class="key-row">
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
+      <button class="btn-small" onclick="saveKey()">Save</button>
+      <button class="btn-clear" onclick="clearKey()">Clear</button>
+    </div>
+    <p class="key-note">Saved in your browser only. Never sent anywhere except directly to Anthropic's API.</p>
+    <p class="key-saved" id="key-saved-msg">Key saved</p>
+  </div>
+
+  <hr class="divider" />
+
+  <div id="upload-section">
+    <p class="section-label">Item photo</p>
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <span class="drop-icon">📷</span>
+      <p class="drop-label">Tap to upload a photo</p>
+      <p class="drop-sub">JPG, PNG, WEBP</p>
+    </div>
+    <img id="preview" alt="Item preview" />
+    <input type="file" id="file-input" accept="image/*" style="display:none" />
+
+    <p class="section-label" style="margin-top:16px;">Extra details (optional)</p>
+    <textarea id="extra-context" rows="3" placeholder="Brand, model, condition, any markings, what it came off of... anything that helps identify it"></textarea>
+
+    <p class="error" id="error-msg"></p>
+    <button class="primary" id="analyze-btn" onclick="analyze()" disabled>Identify &amp; price</button>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p style="font-size:14px; color:#666;">Analyzing item...</p>
+  </div>
+
+  <div id="results">
+    <div class="result-row">
+      <strong style="font-size:16px;">Results</strong>
+      <button class="reset-btn" onclick="resetScan()">New item</button>
+    </div>
+
+    <div id="result-thumb" style="margin-bottom:12px;"></div>
+
+    <div class="grid-2">
+      <div class="result-card">
+        <p class="result-label">Identified as</p>
+        <p class="result-value" id="r-item" style="font-weight:600;">—</p>
+      </div>
+      <div class="result-card">
+        <p class="result-label">Condition</p>
+        <p class="result-value" id="r-condition">—</p>
+      </div>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Estimated resale value</p>
+      <p class="price-big" id="r-price">—</p>
+      <p class="price-note" id="r-price-note"></p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Best platforms</p>
+      <div id="r-platforms" style="margin-top:6px;"></div>
+      <p class="platform-tip" id="r-platform-tip"></p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Listing title</p>
+      <button class="copy-btn" onclick="copyText('r-title')">Copy</button>
+      <p class="result-value" id="r-title">—</p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Listing description</p>
+      <button class="copy-btn" onclick="copyText('r-desc')">Copy</button>
+      <pre class="desc" id="r-desc">—</pre>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Selling tips</p>
+      <pre class="desc" id="r-tips">—</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+let imageBase64 = null;
+let imageMime = null;
+
+const fileInput = document.getElementById('file-input');
+const preview = document.getElementById('preview');
+const dropZone = document.getElementById('drop-zone');
+const analyzeBtn = document.getElementById('analyze-btn');
+
+function getKey() {
+  return localStorage.getItem('anthropic_key') || '';
+}
+
+function saveKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (!val) return;
+  localStorage.setItem('anthropic_key', val);
+  document.getElementById('api-key-input').value = '';
+  const msg = document.getElementById('key-saved-msg');
+  msg.textContent = 'Key saved';
+  msg.style.display = 'block';
+}
+
+function clearKey() {
+  localStorage.removeItem('anthropic_key');
+  document.getElementById('api-key-input').value = '';
+  document.getElementById('key-saved-msg').style.display = 'none';
+}
+
+window.addEventListener('load', () => {
+  if (getKey()) {
+    const msg = document.getElementById('key-saved-msg');
+    msg.textContent = 'Key loaded from browser storage';
+    msg.style.display = 'block';
+  }
+});
+
+fileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) loadFile(file);
+});
+
+dropZone.addEventListener('dragover', e => e.preventDefault());
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) loadFile(file);
+});
+
+function loadFile(file) {
+  imageMime = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    imageBase64 = dataUrl.split(',')[1];
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    dropZone.classList.add('has-image');
+    dropZone.querySelector('.drop-icon').style.display = 'none';
+    dropZone.querySelector('.drop-label').style.display = 'none';
+    dropZone.querySelector('.drop-sub').style.display = 'none';
+    analyzeBtn.disabled = false;
+    document.getElementById('error-msg').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).catch(() => {});
+  const btn = el.previousElementSibling;
+  const orig = btn.textContent;
+  btn.textContent = 'Copied';
+  setTimeout(() => { btn.textContent = orig; }, 1600);
+}
+
+function resetScan() {
+  imageBase64 = null; imageMime = null;
+  preview.src = ''; preview.style.display = 'none';
+  dropZone.classList.remove('has-image');
+  dropZone.querySelector('.drop-icon').style.display = 'block';
+  dropZone.querySelector('.drop-label').style.display = 'block';
+  dropZone.querySelector('.drop-sub').style.display = 'block';
+  fileInput.value = '';
+  analyzeBtn.disabled = true;
+  document.getElementById('extra-context').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('upload-section').style.display = 'block';
+  document.getElementById('error-msg').style.display = 'none';
+}
+
+async function analyze() {
+  if (!imageBase64) return;
+  const key = getKey();
+  const errEl = document.getElementById('error-msg');
+
+  if (!key) {
+    errEl.textContent = 'Enter and save your Anthropic API key first.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const context = document.getElementById('extra-context').value.trim();
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  errEl.style.display = 'none';
+
+  const systemPrompt = `You are a resale pricing expert specializing in construction tools, power tools, hand tools, electronics, appliance parts, and household appliances like washers and dryers.
+
+Analyze the photo and any extra context. Return ONLY a valid JSON object with these exact keys — no preamble, no markdown fences:
+{
+  "item": "specific item name with brand and model if visible",
+  "condition": "Excellent / Good / Fair / Poor — with 1 short sentence explaining why",
+  "price_low": number (USD integer, no symbol),
+  "price_high": number (USD integer, no symbol),
+  "price_note": "brief note on the biggest factor affecting this price range",
+  "platforms": array of strings — choose from: "Facebook Marketplace", "eBay", "Craigslist", "OfferUp" — list only ones that make sense for this item,
+  "platform_tip": "1-2 sentences on which platform is best for this item and why",
+  "title": "optimized listing title under 80 characters",
+  "description": "ready-to-paste listing description, 4-6 lines. Include: what it is, brand/model, condition, what works, any issues, pickup or shipping note.",
+  "tips": "3 short actionable tips for selling this specific item faster. Use bullet character • to start each tip."
+}`;
+
+  const userContent = [
+    { type: "image", source: { type: "base64", media_type: imageMime, data: imageBase64 } },
+    { type: "text", text: context ? `Seller notes: ${context}` : "Identify and price this item." }
+  ];
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userContent }]
+      })
+    });
+
+    if (!resp.ok) {
+      const errData = await resp.json().catch(() => ({}));
+      throw new Error(errData.error?.message || `API error ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const raw = data.content.map(b => b.text || '').join('').replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(raw);
+
+    document.getElementById('r-item').textContent = parsed.item || '—';
+    document.getElementById('r-condition').textContent = parsed.condition || '—';
+    document.getElementById('r-price').textContent =
+      (parsed.price_low && parsed.price_high) ? `$${parsed.price_low} – $${parsed.price_high}` : '—';
+    document.getElementById('r-price-note').textContent = parsed.price_note || '';
+    document.getElementById('r-title').textContent = parsed.title || '—';
+    document.getElementById('r-desc').textContent = parsed.description || '—';
+    document.getElementById('r-tips').textContent = parsed.tips || '—';
+    document.getElementById('r-platform-tip').textContent = parsed.platform_tip || '';
+
+    const pRow = document.getElementById('r-platforms');
+    pRow.innerHTML = '';
+    (parsed.platforms || []).forEach(p => {
+      const b = document.createElement('span');
+      b.className = 'badge ' + (p.includes('Facebook') ? 'badge-fb' : p.includes('eBay') ? 'badge-eb' : 'badge-cr');
+      b.textContent = p;
+      pRow.appendChild(b);
+    });
+
+    const thumb = document.getElementById('result-thumb');
+    thumb.innerHTML = `<img src="${preview.src}" style="width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1px solid #e8e8e8;" alt="Item" />`;
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+
+  } catch(err) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('upload-section').style.display = 'block';
+    errEl.textContent = 'Error: ' + err.message;
+    errEl.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
