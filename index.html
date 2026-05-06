@@ -75,7 +75,7 @@
       <button class="btn-small" onclick="saveKey()">Save</button>
       <button class="btn-clear" onclick="clearKey()">Clear</button>
     </div>
-    <p class="key-note">Saved in your browser only. Never sent anywhere except directly to Anthropic's API.</p>
+    <p class="key-note">Saved in your browser only. Never sent anywhere except directly to Anthropic.</p>
     <p class="key-saved" id="key-saved-msg">Key saved</p>
   </div>
 
@@ -86,13 +86,13 @@
     <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <span class="drop-icon">📷</span>
       <p class="drop-label">Tap to upload a photo</p>
-      <p class="drop-sub">JPG, PNG, WEBP</p>
+      <p class="drop-sub">JPG, PNG, WEBP • Max ~5MB recommended</p>
     </div>
     <img id="preview" alt="Item preview" />
     <input type="file" id="file-input" accept="image/*" style="display:none" />
 
     <p class="section-label" style="margin-top:16px;">Extra details (optional)</p>
-    <textarea id="extra-context" rows="3" placeholder="Brand, model, condition, any markings, what it came off of... anything that helps identify it"></textarea>
+    <textarea id="extra-context" rows="3" placeholder="Brand, model, condition, any markings, what it came off of..."></textarea>
 
     <p class="error" id="error-msg"></p>
     <button class="primary" id="analyze-btn" onclick="analyze()" disabled>Identify &amp; price</button>
@@ -100,7 +100,7 @@
 
   <div id="loading">
     <div class="spinner"></div>
-    <p style="font-size:14px; color:#666;">Analyzing item...</p>
+    <p style="font-size:14px; color:#666;">Analyzing item with Claude Sonnet 4.6...</p>
   </div>
 
   <div id="results">
@@ -108,7 +108,6 @@
       <strong style="font-size:16px;">Results</strong>
       <button class="reset-btn" onclick="resetScan()">New item</button>
     </div>
-
     <div id="result-thumb" style="margin-bottom:12px;"></div>
 
     <div class="grid-2">
@@ -172,7 +171,7 @@ function saveKey() {
   localStorage.setItem('anthropic_key', val);
   document.getElementById('api-key-input').value = '';
   const msg = document.getElementById('key-saved-msg');
-  msg.textContent = 'Key saved';
+  msg.textContent = 'Key saved ✓';
   msg.style.display = 'block';
 }
 
@@ -184,9 +183,8 @@ function clearKey() {
 
 window.addEventListener('load', () => {
   if (getKey()) {
-    const msg = document.getElementById('key-saved-msg');
-    msg.textContent = 'Key loaded from browser storage';
-    msg.style.display = 'block';
+    document.getElementById('key-saved-msg').style.display = 'block';
+    document.getElementById('key-saved-msg').textContent = 'Key loaded from storage';
   }
 });
 
@@ -203,83 +201,91 @@ dropZone.addEventListener('drop', e => {
 });
 
 function loadFile(file) {
+  if (file.size > 8 * 1024 * 1024) {
+    showError("Image is too large (max ~8MB recommended)");
+    return;
+  }
   imageMime = file.type || 'image/jpeg';
   const reader = new FileReader();
   reader.onload = ev => {
-    const dataUrl = ev.target.result;
-    imageBase64 = dataUrl.split(',')[1];
-    preview.src = dataUrl;
+    imageBase64 = ev.target.result.split(',')[1];
+    preview.src = ev.target.result;
     preview.style.display = 'block';
     dropZone.classList.add('has-image');
-    dropZone.querySelector('.drop-icon').style.display = 'none';
-    dropZone.querySelector('.drop-label').style.display = 'none';
-    dropZone.querySelector('.drop-sub').style.display = 'none';
+    dropZone.querySelectorAll('.drop-icon, .drop-label, .drop-sub').forEach(el => el.style.display = 'none');
     analyzeBtn.disabled = false;
-    document.getElementById('error-msg').style.display = 'none';
+    hideError();
   };
   reader.readAsDataURL(file);
 }
 
+function showError(msg) {
+  const errEl = document.getElementById('error-msg');
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
+}
+
+function hideError() {
+  document.getElementById('error-msg').style.display = 'none';
+}
+
 function copyText(id) {
   const el = document.getElementById(id);
-  navigator.clipboard.writeText(el.innerText).catch(() => {});
+  navigator.clipboard.writeText(el.textContent || el.innerText).catch(() => {});
   const btn = el.previousElementSibling;
   const orig = btn.textContent;
-  btn.textContent = 'Copied';
-  setTimeout(() => { btn.textContent = orig; }, 1600);
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = orig, 1600);
 }
 
 function resetScan() {
   imageBase64 = null; imageMime = null;
   preview.src = ''; preview.style.display = 'none';
   dropZone.classList.remove('has-image');
-  dropZone.querySelector('.drop-icon').style.display = 'block';
-  dropZone.querySelector('.drop-label').style.display = 'block';
-  dropZone.querySelector('.drop-sub').style.display = 'block';
+  dropZone.querySelectorAll('.drop-icon, .drop-label, .drop-sub').forEach(el => el.style.display = 'block');
   fileInput.value = '';
   analyzeBtn.disabled = true;
   document.getElementById('extra-context').value = '';
   document.getElementById('results').style.display = 'none';
   document.getElementById('upload-section').style.display = 'block';
-  document.getElementById('error-msg').style.display = 'none';
+  hideError();
 }
 
 async function analyze() {
   if (!imageBase64) return;
-  const key = getKey();
-  const errEl = document.getElementById('error-msg');
 
+  const key = getKey();
   if (!key) {
-    errEl.textContent = 'Enter and save your Anthropic API key first.';
-    errEl.style.display = 'block';
+    showError('Please enter and save your Anthropic API key first.');
     return;
   }
 
   const context = document.getElementById('extra-context').value.trim();
+
   document.getElementById('upload-section').style.display = 'none';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('results').style.display = 'none';
-  errEl.style.display = 'none';
+  hideError();
 
-  const systemPrompt = `You are a resale pricing expert specializing in construction tools, power tools, hand tools, electronics, appliance parts, and household appliances like washers and dryers.
+  const systemPrompt = `You are a resale pricing expert specializing in construction tools, power tools, hand tools, electronics, appliance parts, and household appliances.
+Analyze the photo and any extra context. Return ONLY a valid JSON object with these exact keys — no preamble, no markdown, no extra text:
 
-Analyze the photo and any extra context. Return ONLY a valid JSON object with these exact keys — no preamble, no markdown fences:
 {
   "item": "specific item name with brand and model if visible",
   "condition": "Excellent / Good / Fair / Poor — with 1 short sentence explaining why",
-  "price_low": number (USD integer, no symbol),
-  "price_high": number (USD integer, no symbol),
+  "price_low": number,
+  "price_high": number,
   "price_note": "brief note on the biggest factor affecting this price range",
-  "platforms": array of strings — choose from: "Facebook Marketplace", "eBay", "Craigslist", "OfferUp" — list only ones that make sense for this item,
-  "platform_tip": "1-2 sentences on which platform is best for this item and why",
+  "platforms": array of strings from: ["Facebook Marketplace", "eBay", "Craigslist", "OfferUp"],
+  "platform_tip": "1-2 sentences on which platform is best and why",
   "title": "optimized listing title under 80 characters",
-  "description": "ready-to-paste listing description, 4-6 lines. Include: what it is, brand/model, condition, what works, any issues, pickup or shipping note.",
-  "tips": "3 short actionable tips for selling this specific item faster. Use bullet character • to start each tip."
+  "description": "ready-to-paste listing description, 4-6 lines",
+  "tips": "3 short actionable tips. Start each with •"
 }`;
 
   const userContent = [
     { type: "image", source: { type: "base64", media_type: imageMime, data: imageBase64 } },
-    { type: "text", text: context ? `Seller notes: ${context}` : "Identify and price this item." }
+    { type: "text", text: context ? `Seller notes: ${context}` : "Identify this item for resale and give pricing + listing info." }
   ];
 
   try {
@@ -292,8 +298,9 @@ Analyze the photo and any extra context. Return ONLY a valid JSON object with th
         "anthropic-dangerous-direct-browser-access": "true"
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
+        model: "claude-sonnet-4-6",      // Updated model
+        max_tokens: 1200,
+        temperature: 0.5,
         system: systemPrompt,
         messages: [{ role: "user", content: userContent }]
       })
@@ -301,16 +308,21 @@ Analyze the photo and any extra context. Return ONLY a valid JSON object with th
 
     if (!resp.ok) {
       const errData = await resp.json().catch(() => ({}));
-      throw new Error(errData.error?.message || `API error ${resp.status}`);
+      throw new Error(errData.error?.message || `API Error ${resp.status}`);
     }
 
     const data = await resp.json();
-    const raw = data.content.map(b => b.text || '').join('').replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(raw);
+    let rawText = data.content.map(b => b.text || '').join('').trim();
 
+    // Improved JSON extraction
+    rawText = rawText.replace(/```json|```/g, '').trim();
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : rawText);
+
+    // Populate results
     document.getElementById('r-item').textContent = parsed.item || '—';
     document.getElementById('r-condition').textContent = parsed.condition || '—';
-    document.getElementById('r-price').textContent =
+    document.getElementById('r-price').textContent = 
       (parsed.price_low && parsed.price_high) ? `$${parsed.price_low} – $${parsed.price_high}` : '—';
     document.getElementById('r-price-note').textContent = parsed.price_note || '';
     document.getElementById('r-title').textContent = parsed.title || '—';
@@ -318,26 +330,28 @@ Analyze the photo and any extra context. Return ONLY a valid JSON object with th
     document.getElementById('r-tips').textContent = parsed.tips || '—';
     document.getElementById('r-platform-tip').textContent = parsed.platform_tip || '';
 
+    // Platforms
     const pRow = document.getElementById('r-platforms');
     pRow.innerHTML = '';
     (parsed.platforms || []).forEach(p => {
       const b = document.createElement('span');
-      b.className = 'badge ' + (p.includes('Facebook') ? 'badge-fb' : p.includes('eBay') ? 'badge-eb' : 'badge-cr');
+      b.className = `badge ${p.includes('Facebook') ? 'badge-fb' : p.includes('eBay') ? 'badge-eb' : 'badge-cr'}`;
       b.textContent = p;
       pRow.appendChild(b);
     });
 
-    const thumb = document.getElementById('result-thumb');
-    thumb.innerHTML = `<img src="${preview.src}" style="width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1px solid #e8e8e8;" alt="Item" />`;
+    // Thumbnail
+    document.getElementById('result-thumb').innerHTML = 
+      `<img src="${preview.src}" style="width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1px solid #e8e8e8;" alt="Item" />`;
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('results').style.display = 'block';
 
-  } catch(err) {
+  } catch (err) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('upload-section').style.display = 'block';
-    errEl.textContent = 'Error: ' + err.message;
-    errEl.style.display = 'block';
+    showError('Error: ' + err.message);
+    console.error(err);
   }
 }
 </script>
