@@ -11,62 +11,39 @@
   h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
   .sub { font-size: 14px; color: #666; margin-bottom: 24px; }
   .section-label { font-size: 11px; color: #888; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; }
-  input[type="password"] {
-    flex: 1; padding: 10px 12px;
-    border: 1px solid #ddd; border-radius: 8px;
-    font-size: 14px; font-family: inherit;
-    background: #fff; color: #1a1a1a;
-  }
+  input[type="password"] { flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: #fff; }
   input[type="password"]:focus { outline: none; border-color: #888; }
   .key-row { display: flex; gap: 8px; align-items: center; }
-  .btn-small { padding: 10px 16px; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; white-space: nowrap; }
+  .btn-small { padding: 10px 16px; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
   .btn-small:hover { opacity: 0.82; }
-  .btn-clear { padding: 10px 12px; background: none; color: #888; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 13px; white-space: nowrap; }
-  .btn-clear:hover { background: #f0f0eb; }
-  .key-note { font-size: 12px; color: #888; margin-top: 6px; }
-  .key-saved { font-size: 13px; color: #1a7a4a; margin-top: 6px; display: none; }
-  .drop-zone { border: 1.5px dashed #ccc; border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; background: #fff; transition: background 0.15s, border-color 0.15s; }
+  .btn-clear { padding: 10px 12px; background: none; color: #888; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
+  .drop-zone { border: 1.5px dashed #ccc; border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; background: #fff; transition: all 0.15s; }
   .drop-zone:hover { background: #fafaf8; border-color: #aaa; }
-  .drop-zone.has-image { padding: 0; border-style: solid; overflow: hidden; }
-  #preview { width: 100%; max-height: 280px; object-fit: contain; display: none; border-radius: 12px; }
-  .drop-icon { font-size: 36px; display: block; margin-bottom: 8px; }
-  .drop-label { font-size: 14px; color: #555; }
-  .drop-sub { font-size: 12px; color: #999; margin-top: 4px; }
-  textarea { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; color: #1a1a1a; background: #fff; resize: vertical; margin-top: 12px; }
-  textarea:focus { outline: none; border-color: #888; }
-  button.primary { width: 100%; margin-top: 14px; padding: 12px; font-size: 15px; font-weight: 500; background: #1a1a1a; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.15s; }
-  button.primary:disabled { opacity: 0.35; cursor: not-allowed; }
-  button.primary:hover:not(:disabled) { opacity: 0.82; }
+  .drop-zone.has-image { padding: 12px; border-style: solid; }
+  .previews { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 12px; }
+  .preview-thumb { position: relative; }
+  .preview-thumb img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+  .remove-img { position: absolute; top: -6px; right: -6px; background: #c0392b; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
+  textarea { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; font-size: 14px; resize: vertical; margin-top: 8px; }
+  button.primary { width: 100%; margin-top: 16px; padding: 13px; font-size: 16px; font-weight: 600; background: #1a1a1a; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
   .error { color: #c0392b; font-size: 13px; margin-top: 10px; display: none; }
-  #loading { display: none; text-align: center; padding: 40px 0; }
-  .spinner { width: 30px; height: 30px; border: 2.5px solid #e0e0e0; border-top-color: #555; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px; }
+  #loading { display: none; text-align: center; padding: 50px 0; }
+  .spinner { width: 34px; height: 34px; border: 3px solid #e0e0e0; border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  #results { display: none; margin-top: 4px; }
-  .result-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .result-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
-  .result-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
-  .result-value { font-size: 15px; color: #1a1a1a; line-height: 1.55; }
-  .price-big { font-size: 24px; font-weight: 600; color: #1a7a4a; }
-  .price-note { font-size: 12px; color: #888; margin-top: 4px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .badge { display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 20px; margin: 3px 4px 3px 0; font-weight: 500; }
-  .badge-fb { background: #e7f0fd; color: #1a56c4; }
-  .badge-eb { background: #fef3e2; color: #a05a00; }
-  .badge-cr { background: #f2f2f2; color: #555; }
-  .copy-btn { font-size: 12px; cursor: pointer; float: right; color: #888; background: none; border: 1px solid #ddd; border-radius: 6px; padding: 2px 8px; }
-  .copy-btn:hover { background: #f5f5f0; }
-  pre.desc { white-space: pre-wrap; font-size: 14px; font-family: inherit; line-height: 1.6; color: #1a1a1a; }
-  button.reset-btn { font-size: 13px; padding: 6px 14px; background: none; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
-  button.reset-btn:hover { background: #f5f5f0; }
-  .platform-tip { font-size: 13px; color: #555; margin-top: 10px; line-height: 1.5; }
-  .divider { border: none; border-top: 1px solid #e8e8e8; margin: 20px 0; }
-  @media (max-width: 420px) { .grid-2 { grid-template-columns: 1fr; } }
+  #results { display: none; margin-top: 8px; }
+  .result-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .result-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .confidence { font-size: 15px; font-weight: 600; color: #1a7a4a; }
+  .history-btn { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: white; border: none; padding: 12px 16px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .history-item { display: flex; gap: 12px; padding: 10px; background: #fff; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border: 1px solid #eee; }
+  .history-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Resale Identifier</h1>
-  <p class="sub">Upload a photo — get an ID, price estimate, listing, and where to sell.</p>
+  <p class="sub">Upload 1–4 photos • Get smart pricing + ready-to-post listings</p>
 
   <div id="key-section" style="margin-bottom:20px;">
     <p class="section-label">Anthropic API key</p>
@@ -75,217 +52,169 @@
       <button class="btn-small" onclick="saveKey()">Save</button>
       <button class="btn-clear" onclick="clearKey()">Clear</button>
     </div>
-    <p class="key-note">Saved in your browser only. Never sent anywhere except directly to Anthropic.</p>
-    <p class="key-saved" id="key-saved-msg">Key saved</p>
+    <p class="key-note">Saved locally only</p>
+    <p class="key-saved" id="key-saved-msg"></p>
   </div>
 
-  <hr class="divider" />
+  <hr class="divider" style="border-top:1px solid #e8e8e8; margin:20px 0;">
 
   <div id="upload-section">
-    <p class="section-label">Item photo</p>
+    <p class="section-label">Item Photos (1–4)</p>
     <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-      <span class="drop-icon">📷</span>
-      <p class="drop-label">Tap to upload a photo</p>
-      <p class="drop-sub">JPG, PNG, WEBP • Max ~5MB recommended</p>
+      <span class="drop-icon" style="font-size:42px;">📸</span>
+      <p class="drop-label">Tap to upload photos</p>
+      <p class="drop-sub">Multiple photos recommended (different angles, labels, wear)</p>
     </div>
-    <img id="preview" alt="Item preview" />
-    <input type="file" id="file-input" accept="image/*" style="display:none" />
+    <input type="file" id="file-input" accept="image/*" multiple style="display:none" />
 
-    <p class="section-label" style="margin-top:16px;">Extra details (optional)</p>
-    <textarea id="extra-context" rows="3" placeholder="Brand, model, condition, any markings, what it came off of..."></textarea>
+    <div id="previews" class="previews"></div>
+
+    <p class="section-label" style="margin-top:20px;">Extra details (optional)</p>
+    <textarea id="extra-context" rows="3" placeholder="Brand, model, known issues, what it came from..."></textarea>
 
     <p class="error" id="error-msg"></p>
-    <button class="primary" id="analyze-btn" onclick="analyze()" disabled>Identify &amp; price</button>
+    <button class="primary" id="analyze-btn" onclick="analyze()" disabled>Analyze for Resale</button>
   </div>
 
   <div id="loading">
     <div class="spinner"></div>
-    <p style="font-size:14px; color:#666;">Analyzing item with Claude Sonnet 4.6...</p>
+    <p>Claude is analyzing your item...</p>
   </div>
 
-  <div id="results">
-    <div class="result-row">
-      <strong style="font-size:16px;">Results</strong>
-      <button class="reset-btn" onclick="resetScan()">New item</button>
-    </div>
-    <div id="result-thumb" style="margin-bottom:12px;"></div>
-
-    <div class="grid-2">
-      <div class="result-card">
-        <p class="result-label">Identified as</p>
-        <p class="result-value" id="r-item" style="font-weight:600;">—</p>
-      </div>
-      <div class="result-card">
-        <p class="result-label">Condition</p>
-        <p class="result-value" id="r-condition">—</p>
-      </div>
-    </div>
-
-    <div class="result-card">
-      <p class="result-label">Estimated resale value</p>
-      <p class="price-big" id="r-price">—</p>
-      <p class="price-note" id="r-price-note"></p>
-    </div>
-
-    <div class="result-card">
-      <p class="result-label">Best platforms</p>
-      <div id="r-platforms" style="margin-top:6px;"></div>
-      <p class="platform-tip" id="r-platform-tip"></p>
-    </div>
-
-    <div class="result-card">
-      <p class="result-label">Listing title</p>
-      <button class="copy-btn" onclick="copyText('r-title')">Copy</button>
-      <p class="result-value" id="r-title">—</p>
-    </div>
-
-    <div class="result-card">
-      <p class="result-label">Listing description</p>
-      <button class="copy-btn" onclick="copyText('r-desc')">Copy</button>
-      <pre class="desc" id="r-desc">—</pre>
-    </div>
-
-    <div class="result-card">
-      <p class="result-label">Selling tips</p>
-      <pre class="desc" id="r-tips">—</pre>
-    </div>
-  </div>
+  <div id="results"></div>
 </div>
 
+<button class="history-btn" onclick="showHistory()">📜 History</button>
+
 <script>
-let imageBase64 = null;
-let imageMime = null;
+// ==================== STATE ====================
+let images = []; // array of {base64, mime}
+let currentResult = null;
+const MAX_IMAGES = 4;
 
-const fileInput = document.getElementById('file-input');
-const preview = document.getElementById('preview');
-const dropZone = document.getElementById('drop-zone');
-const analyzeBtn = document.getElementById('analyze-btn');
-
-function getKey() {
-  return localStorage.getItem('anthropic_key') || '';
+// ==================== LOCALSTORAGE HELPERS ====================
+function saveToHistory(result) {
+  let history = JSON.parse(localStorage.getItem('resale_history') || '[]');
+  history.unshift({
+    timestamp: Date.now(),
+    ...result,
+    images: images.slice(0, 2) // save only first 2 thumbnails to save space
+  });
+  if (history.length > 30) history.pop();
+  localStorage.setItem('resale_history', JSON.stringify(history));
 }
 
-function saveKey() {
-  const val = document.getElementById('api-key-input').value.trim();
-  if (!val) return;
-  localStorage.setItem('anthropic_key', val);
-  document.getElementById('api-key-input').value = '';
-  const msg = document.getElementById('key-saved-msg');
-  msg.textContent = 'Key saved ✓';
-  msg.style.display = 'block';
+function getHistory() {
+  return JSON.parse(localStorage.getItem('resale_history') || '[]');
 }
 
-function clearKey() {
-  localStorage.removeItem('anthropic_key');
-  document.getElementById('api-key-input').value = '';
-  document.getElementById('key-saved-msg').style.display = 'none';
-}
-
-window.addEventListener('load', () => {
-  if (getKey()) {
-    document.getElementById('key-saved-msg').style.display = 'block';
-    document.getElementById('key-saved-msg').textContent = 'Key loaded from storage';
-  }
-});
-
-fileInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (file) loadFile(file);
-});
-
-dropZone.addEventListener('dragover', e => e.preventDefault());
-dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file) loadFile(file);
-});
-
-function loadFile(file) {
-  if (file.size > 8 * 1024 * 1024) {
-    showError("Image is too large (max ~8MB recommended)");
-    return;
-  }
-  imageMime = file.type || 'image/jpeg';
-  const reader = new FileReader();
-  reader.onload = ev => {
-    imageBase64 = ev.target.result.split(',')[1];
-    preview.src = ev.target.result;
-    preview.style.display = 'block';
-    dropZone.classList.add('has-image');
-    dropZone.querySelectorAll('.drop-icon, .drop-label, .drop-sub').forEach(el => el.style.display = 'none');
-    analyzeBtn.disabled = false;
-    hideError();
-  };
-  reader.readAsDataURL(file);
-}
-
+// ==================== UI HELPERS ====================
 function showError(msg) {
-  const errEl = document.getElementById('error-msg');
-  errEl.textContent = msg;
-  errEl.style.display = 'block';
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
 }
 
 function hideError() {
   document.getElementById('error-msg').style.display = 'none';
 }
 
-function copyText(id) {
-  const el = document.getElementById(id);
-  navigator.clipboard.writeText(el.textContent || el.innerText).catch(() => {});
-  const btn = el.previousElementSibling;
-  const orig = btn.textContent;
-  btn.textContent = 'Copied!';
-  setTimeout(() => btn.textContent = orig, 1600);
+function renderPreviews() {
+  const container = document.getElementById('previews');
+  container.innerHTML = '';
+  images.forEach((img, index) => {
+    const div = document.createElement('div');
+    div.className = 'preview-thumb';
+    div.innerHTML = `
+      <img src="${img.dataUrl}" alt="preview">
+      <button class="remove-img" onclick="removeImage(${index})">×</button>
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('analyze-btn').disabled = images.length === 0;
 }
 
-function resetScan() {
-  imageBase64 = null; imageMime = null;
-  preview.src = ''; preview.style.display = 'none';
-  dropZone.classList.remove('has-image');
-  dropZone.querySelectorAll('.drop-icon, .drop-label, .drop-sub').forEach(el => el.style.display = 'block');
-  fileInput.value = '';
-  analyzeBtn.disabled = true;
-  document.getElementById('extra-context').value = '';
-  document.getElementById('results').style.display = 'none';
-  document.getElementById('upload-section').style.display = 'block';
-  hideError();
-}
+window.removeImage = function(index) {
+  images.splice(index, 1);
+  renderPreviews();
+};
 
+// ==================== FILE HANDLING ====================
+const fileInput = document.getElementById('file-input');
+fileInput.addEventListener('change', e => {
+  const files = Array.from(e.target.files).slice(0, MAX_IMAGES - images.length);
+  files.forEach(file => {
+    if (file.size > 10 * 1024 * 1024) return showError("One image is too large");
+    const reader = new FileReader();
+    reader.onload = ev => {
+      images.push({
+        base64: ev.target.result.split(',')[1],
+        mime: file.type || 'image/jpeg',
+        dataUrl: ev.target.result
+      });
+      renderPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+// Drag & Drop
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', e => e.preventDefault());
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = Array.from(e.dataTransfer.files).slice(0, MAX_IMAGES - images.length);
+  // Reuse same logic as above
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      images.push({ base64: ev.target.result.split(',')[1], mime: file.type, dataUrl: ev.target.result });
+      renderPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+// ==================== CORE ANALYSIS ====================
 async function analyze() {
-  if (!imageBase64) return;
+  if (images.length === 0) return;
 
-  const key = getKey();
-  if (!key) {
-    showError('Please enter and save your Anthropic API key first.');
-    return;
-  }
+  const key = localStorage.getItem('anthropic_key');
+  if (!key) return showError('Please save your Anthropic API key first.');
 
   const context = document.getElementById('extra-context').value.trim();
 
   document.getElementById('upload-section').style.display = 'none';
   document.getElementById('loading').style.display = 'block';
-  document.getElementById('results').style.display = 'none';
   hideError();
 
-  const systemPrompt = `You are a resale pricing expert specializing in construction tools, power tools, hand tools, electronics, appliance parts, and household appliances.
-Analyze the photo and any extra context. Return ONLY a valid JSON object with these exact keys — no preamble, no markdown, no extra text:
+  const systemPrompt = `You are an expert resale valuation specialist for tools, electronics, appliances, and household items.
+First identify the category, then analyze all provided photos.
+
+Return ONLY valid JSON with these exact keys:
 
 {
-  "item": "specific item name with brand and model if visible",
-  "condition": "Excellent / Good / Fair / Poor — with 1 short sentence explaining why",
+  "category": "Power Tool | Hand Tool | Appliance | Electronics | Furniture | Other",
+  "item": "Specific brand + model name",
+  "condition": "Excellent / Good / Fair / Poor — with one short reason",
+  "confidence": number between 60 and 95,
   "price_low": number,
   "price_high": number,
-  "price_note": "brief note on the biggest factor affecting this price range",
-  "platforms": array of strings from: ["Facebook Marketplace", "eBay", "Craigslist", "OfferUp"],
-  "platform_tip": "1-2 sentences on which platform is best and why",
-  "title": "optimized listing title under 80 characters",
-  "description": "ready-to-paste listing description, 4-6 lines",
-  "tips": "3 short actionable tips. Start each with •"
+  "price_reasoning": "Detailed 1-2 sentence explanation of the price range including key value factors",
+  "platforms": array from ["Facebook Marketplace", "eBay", "Craigslist", "OfferUp"],
+  "platform_tip": "Best platform recommendation and why",
+  "title": "Best listing title (under 80 chars)",
+  "description": "Ready-to-use 4-6 line description",
+  "tips": "Three tips starting with •"
 }`;
 
   const userContent = [
-    { type: "image", source: { type: "base64", media_type: imageMime, data: imageBase64 } },
-    { type: "text", text: context ? `Seller notes: ${context}` : "Identify this item for resale and give pricing + listing info." }
+    ...images.map(img => ({
+      type: "image",
+      source: { type: "base64", media_type: img.mime, data: img.base64 }
+    })),
+    { type: "text", text: context ? `Additional info: ${context}` : "Analyze these photos for resale value." }
   ];
 
   try {
@@ -298,61 +227,149 @@ Analyze the photo and any extra context. Return ONLY a valid JSON object with th
         "anthropic-dangerous-direct-browser-access": "true"
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",      // Updated model
-        max_tokens: 1200,
-        temperature: 0.5,
+        model: "claude-sonnet-4-6",
+        max_tokens: 1500,
+        temperature: 0.4,
         system: systemPrompt,
         messages: [{ role: "user", content: userContent }]
       })
     });
 
-    if (!resp.ok) {
-      const errData = await resp.json().catch(() => ({}));
-      throw new Error(errData.error?.message || `API Error ${resp.status}`);
-    }
+    if (!resp.ok) throw new Error((await resp.json()).error?.message || "API error");
 
     const data = await resp.json();
-    let rawText = data.content.map(b => b.text || '').join('').trim();
+    let text = data.content.map(c => c.text || '').join('').trim();
+    text = text.replace(/```json|```/g, '').trim();
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
 
-    // Improved JSON extraction
-    rawText = rawText.replace(/```json|```/g, '').trim();
-    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-    const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : rawText);
+    currentResult = parsed;
+    saveToHistory(parsed);
 
-    // Populate results
-    document.getElementById('r-item').textContent = parsed.item || '—';
-    document.getElementById('r-condition').textContent = parsed.condition || '—';
-    document.getElementById('r-price').textContent = 
-      (parsed.price_low && parsed.price_high) ? `$${parsed.price_low} – $${parsed.price_high}` : '—';
-    document.getElementById('r-price-note').textContent = parsed.price_note || '';
-    document.getElementById('r-title').textContent = parsed.title || '—';
-    document.getElementById('r-desc').textContent = parsed.description || '—';
-    document.getElementById('r-tips').textContent = parsed.tips || '—';
-    document.getElementById('r-platform-tip').textContent = parsed.platform_tip || '';
-
-    // Platforms
-    const pRow = document.getElementById('r-platforms');
-    pRow.innerHTML = '';
-    (parsed.platforms || []).forEach(p => {
-      const b = document.createElement('span');
-      b.className = `badge ${p.includes('Facebook') ? 'badge-fb' : p.includes('eBay') ? 'badge-eb' : 'badge-cr'}`;
-      b.textContent = p;
-      pRow.appendChild(b);
-    });
-
-    // Thumbnail
-    document.getElementById('result-thumb').innerHTML = 
-      `<img src="${preview.src}" style="width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1px solid #e8e8e8;" alt="Item" />`;
-
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('results').style.display = 'block';
+    renderResults(parsed);
 
   } catch (err) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('upload-section').style.display = 'block';
-    showError('Error: ' + err.message);
+    showError(err.message);
     console.error(err);
   }
+}
+
+function renderResults(parsed) {
+  document.getElementById('loading').style.display = 'none';
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.style.display = 'block';
+
+  let html = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <strong style="font-size:18px;">Analysis Results</strong>
+      <button onclick="resetScan()" style="padding:6px 14px; font-size:13px;">New Scan</button>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Identified As</p>
+      <p style="font-size:17px; font-weight:600;">${parsed.item || '—'}</p>
+      <p style="margin-top:8px;"><span class="confidence">Confidence: ${parsed.confidence || '?'}%</span></p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Condition</p>
+      <p>${parsed.condition || '—'}</p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Estimated Resale Value</p>
+      <p style="font-size:28px; font-weight:700; color:#1a7a4a;">$${parsed.price_low} – $${parsed.price_high}</p>
+      <p style="margin-top:10px; line-height:1.5;">${parsed.price_reasoning || ''}</p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Best Platforms</p>
+      <div style="margin:8px 0;">${(parsed.platforms || []).map(p => `<span class="badge">${p}</span>`).join('')}</div>
+      <p>${parsed.platform_tip || ''}</p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Recommended Title</p>
+      <button onclick="copyText(this)" style="float:right;font-size:12px;">Copy</button>
+      <p style="font-weight:500;">${parsed.title || '—'}</p>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Listing Description</p>
+      <button onclick="copyText(this)" style="float:right;font-size:12px;">Copy</button>
+      <pre style="white-space:pre-wrap; font-size:14px;">${parsed.description || '—'}</pre>
+    </div>
+
+    <div class="result-card">
+      <p class="result-label">Selling Tips</p>
+      <pre style="white-space:pre-wrap; font-size:14px;">${parsed.tips || '—'}</pre>
+    </div>
+  `;
+
+  resultsDiv.innerHTML = html;
+}
+
+window.copyText = function(btn) {
+  const text = btn.parentElement.querySelector('p, pre').innerText;
+  navigator.clipboard.writeText(text);
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = orig, 1500);
+};
+
+function resetScan() {
+  images = [];
+  document.getElementById('previews').innerHTML = '';
+  document.getElementById('extra-context').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('upload-section').style.display = 'block';
+}
+
+// History
+function showHistory() {
+  const history = getHistory();
+  if (history.length === 0) {
+    alert("No previous scans yet.");
+    return;
+  }
+
+  let html = '<h2 style="margin:20px 0 12px;">Previous Scans</h2>';
+  history.forEach(item => {
+    html += `
+      <div class="history-item" onclick='loadHistoryItem(${JSON.stringify(item).replace(/"/g, '&quot;')})'>
+        <img src="${item.images?.[0]?.dataUrl || ''}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;">
+        <div>
+          <strong>${item.item || 'Unknown item'}</strong><br>
+          <small>$${item.price_low}–$${item.price_high} • ${new Date(item.timestamp).toLocaleDateString()}</small>
+        </div>
+      </div>`;
+  });
+
+  document.getElementById('results').innerHTML = html;
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+}
+
+window.loadHistoryItem = function(item) {
+  currentResult = item;
+  renderResults(item);
+};
+
+// Key management (same as before)
+function saveKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (val) {
+    localStorage.setItem('anthropic_key', val);
+    document.getElementById('key-saved-msg').textContent = 'Key saved ✓';
+    document.getElementById('key-saved-msg').style.display = 'block';
+  }
+}
+function clearKey() {
+  localStorage.removeItem('anthropic_key');
+  document.getElementById('key-saved-msg').style.display = 'none';
 }
 </script>
 </body>
